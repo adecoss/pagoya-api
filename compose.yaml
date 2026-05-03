@@ -1,9 +1,26 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    image: postgres:16
+    container_name: pagoya_db
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_DB: pagoya_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - '5432'
+      - '55432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pagoya_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pagoya.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '8082:80'
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
